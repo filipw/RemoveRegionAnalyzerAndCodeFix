@@ -46,6 +46,7 @@ namespace RemoveRegionAnalyzerAndCodeFix
                         title,
                         async c =>
                         {
+                            Music.Play("Content\\msg.wav");
                             var oldRoot = await context.Document.GetSyntaxRootAsync(c);
                             var newRoot = oldRoot.ReplaceNodes(region.GetRelatedDirectives(), (trivia, syntaxTrivia) => SyntaxFactory.SkippedTokensTrivia());
                             var newDocument = context.Document.WithSyntaxRoot(newRoot.NormalizeWhitespace());

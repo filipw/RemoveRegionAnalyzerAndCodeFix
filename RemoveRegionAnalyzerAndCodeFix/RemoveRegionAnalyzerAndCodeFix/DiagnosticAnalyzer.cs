@@ -34,8 +34,6 @@ namespace RemoveRegionAnalyzerAndCodeFix
         {
             var diagnostic = Diagnostic.Create(Rule, context.Node.GetLocation(), context.Node.GetText().ToString().Replace(Environment.NewLine, string.Empty));
             context.ReportDiagnostic(diagnostic);
-            Task.Delay(2000).GetAwaiter().GetResult();
-            Music.Play("Content\\msg.wav");
         }
     }
 }
