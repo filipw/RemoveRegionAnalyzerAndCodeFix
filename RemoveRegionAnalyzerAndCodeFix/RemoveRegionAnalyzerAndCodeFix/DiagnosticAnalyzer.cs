@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -33,6 +34,8 @@ namespace RemoveRegionAnalyzerAndCodeFix
         {
             var diagnostic = Diagnostic.Create(Rule, context.Node.GetLocation(), context.Node.GetText().ToString().Replace(Environment.NewLine, string.Empty));
             context.ReportDiagnostic(diagnostic);
+            Task.Delay(2000).GetAwaiter().GetResult();
+            Music.Play("Content\\msg.wav");
         }
     }
 }
