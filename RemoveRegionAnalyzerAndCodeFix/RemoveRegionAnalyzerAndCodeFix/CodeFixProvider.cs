@@ -28,31 +28,18 @@ namespace RemoveRegionAnalyzerAndCodeFix
         public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
-            var diagnostic = context.Diagnostics.First();
-            var diagnosticSpan = diagnostic.Location.SourceSpan;
-
-            var node = root.FindNode(diagnosticSpan, findInsideTrivia: true, getInnermostNodeForTie: true);
-            DirectiveTriviaSyntax region = node as RegionDirectiveTriviaSyntax;
-
-            if (region == null)
-            {
-                region = node as EndRegionDirectiveTriviaSyntax;
-            }
+            var node = root.FindNode(context.Span, true, true);
+            var region = node as DirectiveTriviaSyntax;
 
             if (region != null)
             {
-                context.RegisterCodeFix(
-                    CodeAction.Create(
-                        title,
-                        async c =>
-                        {
-                            Music.Play("Content\\msg.wav");
-                            var oldRoot = await context.Document.GetSyntaxRootAsync(c);
-                            var newRoot = oldRoot.ReplaceNodes(region.GetRelatedDirectives(), (trivia, syntaxTrivia) => SyntaxFactory.SkippedTokensTrivia());
-                            var newDocument = context.Document.WithSyntaxRoot(newRoot.NormalizeWhitespace());
-                            return newDocument;
-                        }),
-                    diagnostic);
+                context.RegisterCodeFix(CodeAction.Create(title, c =>
+                {
+                    Music.Play("Content\\msg.wav");
+                    var newRoot = root.ReplaceNodes(region.GetRelatedDirectives(), (syntax, triviaSyntax) => SyntaxFactory.SkippedTokensTrivia());
+                    var newDocument = context.Document.WithSyntaxRoot(newRoot.NormalizeWhitespace());
+                    return Task.FromResult(newDocument);
+                } ), context.Diagnostics.First());
             }
         }
     }
