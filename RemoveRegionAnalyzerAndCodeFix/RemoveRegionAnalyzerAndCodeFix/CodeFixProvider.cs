@@ -36,8 +36,8 @@ namespace RemoveRegionAnalyzerAndCodeFix
                 context.RegisterCodeFix(CodeAction.Create(title, c =>
                 {
                     Music.Play("Content\\msg.wav");
-                    var newRoot = root.ReplaceNodes(region.GetRelatedDirectives(), (syntax, triviaSyntax) => SyntaxFactory.SkippedTokensTrivia());
-                    var newDocument = context.Document.WithSyntaxRoot(newRoot.NormalizeWhitespace());
+                    var newRoot = root.RemoveNodes(node.GetRelatedDirectives(), SyntaxRemoveOptions.AddElasticMarker);
+                    var newDocument = context.Document.WithSyntaxRoot(newRoot);
                     return Task.FromResult(newDocument);
                 } ), context.Diagnostics.First());
             }
