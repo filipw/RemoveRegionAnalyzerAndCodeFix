@@ -32,7 +32,7 @@ namespace RemoveRegionAnalyzerAndCodeFix
 
         private static void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            var diagnostic = Diagnostic.Create(Rule, context.Node.GetLocation(), context.Node.GetText().ToString().Replace(Environment.NewLine, string.Empty));
+            var diagnostic = Diagnostic.Create(Rule, context.Node.GetLocation());
             context.ReportDiagnostic(diagnostic);
         }
     }
